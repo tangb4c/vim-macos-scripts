@@ -34,15 +34,28 @@ on run {input, parameters}
 	set end of command to ";exit"
 	-- compile command
 	set command to command as string
-	
+	-- 这一句必须放在tell前面，因为在tell里面，可能会将app加载，导致判断不准
+	set iterm_running to application "iTerm" is running
 	tell application "iTerm"
 		activate
 		set created to false
+		-- 如果没有运行，activate将启动iterm，需要时间，故在此延迟等待
+		if not iterm_running then
+			repeat 30 times
+				if exists current window then
+					set created to true
+					exit repeat
+				end if
+				delay 0.2
+			end repeat
+		end if
+		
 		if not (exists current window) then
 			create window with default profile
 			set created to true
 		end if
 		tell current window
+			select
 			if not created then
 				create tab with default profile
 			end if
