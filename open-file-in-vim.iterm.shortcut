@@ -1,4 +1,4 @@
--- monterey, shortcut, iterm2
+-- https://github.com/normen/vim-macos-scripts/blob/master/open-file-in-vim.applescript
 -- opens VIM with file, file list, .vim session file or standalone
 -- sets current folder to parent folder of first file
 -- Released under MIT license by Normen Hansen
@@ -37,13 +37,19 @@ on run {input, parameters}
 	
 	tell application "iTerm"
 		activate
+		set created to false
+		if not (exists current window) then
+			create window with default profile
+			set created to true
+		end if
 		tell current window
-			create tab with default profile
-			tell session 1 of current tab
+			if not created then
+				create tab with default profile
+			end if
+			tell current session
 				write text command
 			end tell
 		end tell
 	end tell
 	return input
 end run
-
