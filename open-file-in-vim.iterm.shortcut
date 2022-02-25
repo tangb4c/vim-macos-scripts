@@ -1,0 +1,49 @@
+-- monterey, shortcut, iterm2
+-- opens VIM with file, file list, .vim session file or standalone
+-- sets current folder to parent folder of first file
+-- Released under MIT license by Normen Hansen
+
+on run {input, parameters}
+	set command to {}
+	-- check if theres input files at all
+	if input is null or input is {} or (item 1 in input) is "" then
+		-- no files, open vim without parameters
+		set end of command to "vim"
+	else
+		set firstFile to (item 1 in input)
+		-- get parent folder
+		set pathFolderParent to characters 1 thru -((offset of "/" in (reverse of items of firstFile as string)) + 1) of firstFile
+		set end of command to "cd "
+		set end of command to pathFolderParent
+		set end of command to ";vim"
+		-- support .vim session files
+		if firstFile ends with ".vim" then
+			set end of command to " -S "
+		else
+			-- use tabs
+			set end of command to " -p "
+			--set end of command to " "
+		end if
+		-- compile all file paths
+		set fileList to {}
+		repeat with theItem in input
+			set end of fileList to quote & theItem & quote & space
+		end repeat
+		set end of command to (fileList as string)
+	end if
+	set end of command to ";exit"
+	-- compile command
+	set command to command as string
+	
+	tell application "iTerm"
+		activate
+		tell current window
+			create tab with default profile
+			tell session 1 of current tab
+				write text command
+			end tell
+		end tell
+	end tell
+	return input
+end run
+

@@ -125,3 +125,39 @@ tmux new-window "cd $FOLDER; vim '$1'"
 - In the Settings of the Shortcut:
   - Set available in "Services" and "Finder"
   - Add a keyboard shortcut if wanted
+
+## 更新内容
+
+增加了shortcuts的脚本，使用iTerm2替换了Terminal，以及自己的一些修改内容。
+
+open-file-in-vim.iterm.shortcut：在iTerm2中使用vim打开指定的文件
+
+edit-text-in-vim.iterm.shortcut：在iTerm2中使用vim编辑指定的文本
+
+### 注意点
+
+open-file-in-vim.iterm.shortcut， 在shortcuts中的设置如下：
+
+>  Receive **Files and Folders** input from **Quick Actions**
+
+> If there's no input:
+
+> Ask For **Files**
+
+>  Run AppleScript with后面要选择：**File Path**
+
+在Finder的右键菜单 → Quick Action中，添加该shortcut
+
+
+
+edit-text-in-vim.iterm.shortcut，在shortcuts中的设置如下：
+
+>  Receive **Text** input from **Quick Actions**
+>
+> If there's no input:
+>
+> **Stop and Respond**
+
+在步骤最后一步，添加步骤： **Stop and output**
+
+同时，把**Service Menu**的勾打上。
